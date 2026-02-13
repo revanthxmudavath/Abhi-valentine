@@ -283,9 +283,18 @@ const fetchData = () => {
       Object.keys(data).map((customData) => {
         if (data[customData] !== "") {
           if (customData === "imagePath") {
-            document
-              .getElementById(customData)
-              .setAttribute("src", data[customData]);
+            const mediaElement = document.getElementById(customData);
+            if (mediaElement.tagName === "VIDEO") {
+              // For video elements, update the source tag
+              const sourceTag = mediaElement.querySelector("source");
+              if (sourceTag) {
+                sourceTag.setAttribute("src", data[customData]);
+                mediaElement.load(); // Reload the video with new source
+              }
+            } else {
+              // For image elements
+              mediaElement.setAttribute("src", data[customData]);
+            }
           } else {
             document.getElementById(customData).innerText = data[customData];
           }
